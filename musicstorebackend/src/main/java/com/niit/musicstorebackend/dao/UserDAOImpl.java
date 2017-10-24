@@ -2,6 +2,7 @@ package com.niit.musicstorebackend.dao;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,11 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.niit.musicstorebackend.model.User;
 @Repository("userDAO")
 
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl implements IUserDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	public UserDAOImpl(SessionFactory sessionFactory2) {
+		// TODO Auto-generated constructor stub
+	}
 	public boolean addUser(User user) {
 		Session s=sessionFactory.openSession();
 		Transaction tx=s.beginTransaction();
@@ -38,11 +42,27 @@ public class UserDAOImpl implements UserDAO {
 	@Transactional
 	public User get(String email) {
 		try {
-return	sessionFactory.openSession().createQuery("from User where emailid=:email",User.class).setParameter("email", email).getSingleResult();
+			Session s=sessionFactory.openSession();
+			Transaction tx=s.beginTransaction();
+			Query query=s.createQuery("From User where emailid='"+email+"'");
+			List<User>us=query.list();
+			tx.commit();
+			if(us!=null)
+			{
+				return us.get(0);
+			}
+			else
+			{
+				System.out.println("List empty");
+				return null;
+			}
+			
+
 			} catch (Exception e) {
 				
 				System.out.println(e);
 				return null;
+				
 			}
 
 	}
@@ -64,5 +84,25 @@ return	sessionFactory.openSession().createQuery("from User where emailid=:email"
 		}
 		
 	}
+	public User getbyid(int id) {
 
+		try {
+			String hql = "from User where userid=" +id;
+			Session s = sessionFactory.getCurrentSession();
+			Transaction tx = s.beginTransaction();
+			org.hibernate.Query query = s.createQuery(hql);
+			List<User> list = query.list();
+			tx.commit();
+			if (list == null)
+
+				return null;
+			else {
+				return list.get(0);
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+}
 }

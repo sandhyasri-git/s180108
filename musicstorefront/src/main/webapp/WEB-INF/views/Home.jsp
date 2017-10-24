@@ -16,7 +16,7 @@ width:900px;
 </head>
 <body>
 <div>
-<center><img src="images/pic1.jpg" ></center>
+<center><img src="images/pic1.jpg" /></center>
 
 </div>
 
