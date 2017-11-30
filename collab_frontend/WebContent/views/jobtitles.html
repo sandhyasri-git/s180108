@@ -1,0 +1,14 @@
+<table border="1">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Posted On</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="job in jobs">
+			<td>{{job.jobTitle}}</td>
+			<td>{{job.postedOn | date : 'yyyy-MM-dd'}}</td>
+		</tr>
+	</tbody>
+</table>
